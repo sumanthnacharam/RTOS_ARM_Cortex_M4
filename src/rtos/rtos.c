@@ -89,7 +89,8 @@ void RTOS_Schedule(void)
     TCB_t *Selected_task = NULL;
     for (uint32_t task_index = 0; task_index < task_count; task_index++)
     {
-        if (task_list[task_index].state == TASK_READY)
+        if (task_list[task_index].state == TASK_READY ||
+            task_list[task_index].state == TASK_RUNNING)
         {
 
             if (Selected_task == NULL || task_list[task_index].priority > Selected_task->priority)
@@ -102,6 +103,16 @@ void RTOS_Schedule(void)
         if(Selected_task != NULL)
         {
             next_task = Selected_task;
+
+            if(next_task != current_task)
+            {
+                if(current_task != NULL && current_task->state == TASK_RUNNING)
+                {
+                    current_task->state = TASK_READY;
+                }
+
+                next_task->state = TASK_RUNNING;
+            }
         }
         
     
