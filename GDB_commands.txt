@@ -1,0 +1,16 @@
+cd /e/Library_PyjamaBrah/FreeRTOS/Nucleo/nucleo-f446re
+/mingw64/bin/gdb-multiarch.exe -tui build/firmware.elf
+
+openocd -f interface/stlink.cfg  -c "transport select swd" -c "adapter speed 1000" -f target/stm32f4x.cfg
+
+In gdb:
+
+arm-none-eabi-gdb build/firmware.elf
+
+target remote :3333
+
+load
+
+break main
+continue
+layout src
